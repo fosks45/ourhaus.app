@@ -1,6 +1,6 @@
 /**
  * Firebase Configuration
- * Environment-based Firebase setup
+ * Environment-based Firebase setup with emulator support
  */
 
 export interface FirebaseConfig {
@@ -11,6 +11,14 @@ export interface FirebaseConfig {
   messagingSenderId: string;
   appId: string;
   measurementId?: string;
+}
+
+export interface EmulatorConfig {
+  useEmulator: boolean;
+  auth?: { host: string; port: number };
+  firestore?: { host: string; port: number };
+  storage?: { host: string; port: number };
+  functions?: { host: string; port: number };
 }
 
 /**
@@ -27,6 +35,22 @@ export function getFirebaseConfig(): FirebaseConfig {
       process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
     measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  };
+}
+
+/**
+ * Get emulator configuration from environment variables
+ * Emulators are used for local development
+ */
+export function getEmulatorConfig(): EmulatorConfig {
+  const useEmulator = process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === 'true';
+
+  return {
+    useEmulator,
+    auth: useEmulator ? { host: 'localhost', port: 9099 } : undefined,
+    firestore: useEmulator ? { host: 'localhost', port: 8080 } : undefined,
+    storage: useEmulator ? { host: 'localhost', port: 9199 } : undefined,
+    functions: useEmulator ? { host: 'localhost', port: 5001 } : undefined,
   };
 }
 
