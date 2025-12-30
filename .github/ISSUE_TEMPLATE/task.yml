@@ -1,0 +1,33 @@
+name: Task
+description: Refactor, chores, tooling, or internal work
+title: "task: "
+labels: ["task"]
+body:
+  - type: textarea
+    id: goal
+    attributes:
+      label: Goal
+      placeholder: e.g. Add shared Button + Input components to packages/ui.
+    validations:
+      required: true
+
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Checklist
+      placeholder: |
+        - [ ] …
+        - [ ] …
+    validations:
+      required: true
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: Test plan
+      placeholder: |
+        - `pnpm lint`
+        - `pnpm typecheck`
+        - `pnpm --filter web dev`
+    validations:
+      required: true

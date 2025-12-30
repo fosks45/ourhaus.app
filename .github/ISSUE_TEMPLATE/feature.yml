@@ -1,0 +1,89 @@
+name: Feature
+description: A user-facing feature or internal capability
+title: "feat: "
+labels: ["feature"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / goal
+      description: What are we trying to achieve and why?
+      placeholder: e.g. Allow owners to invite co-owners to a household.
+    validations:
+      required: true
+
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope
+      description: What is in-scope / out-of-scope?
+      placeholder: |
+        In-scope:
+        - …
+        Out-of-scope:
+        - …
+    validations:
+      required: true
+
+  - type: textarea
+    id: requirements
+    attributes:
+      label: Requirements (acceptance criteria)
+      description: Bullet list of measurable outcomes.
+      placeholder: |
+        - [ ] …
+        - [ ] …
+    validations:
+      required: true
+
+  - type: textarea
+    id: data
+    attributes:
+      label: Data model / API notes
+      description: Collections/docs touched, schemas, and invariants.
+      placeholder: |
+        Firestore:
+        - homes/{homeId}/…
+        Invariants:
+        - events are create-only
+        - baseline snapshots immutable
+    validations:
+      required: false
+
+  - type: textarea
+    id: security
+    attributes:
+      label: Security & privacy considerations
+      description: Permissions, rules, access revocation, sensitive data.
+      placeholder: |
+        - Who can do this?
+        - What must be enforced in Security Rules vs Cloud Functions?
+        - Any access revocation required?
+    validations:
+      required: true
+
+  - type: textarea
+    id: ux
+    attributes:
+      label: UX notes (mobile-first)
+      description: Navigation, edge cases, loading states, responsiveness.
+      placeholder: |
+        - Mobile layout:
+        - Desktop layout:
+        - Empty states:
+    validations:
+      required: false
+
+  - type: textarea
+    id: testing
+    attributes:
+      label: Test plan
+      description: Manual steps and any automated tests to add.
+      placeholder: |
+        Manual:
+        1) …
+        2) …
+        Automated:
+        - …
+    validations:
+      required: true
