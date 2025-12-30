@@ -21,7 +21,7 @@ This monorepo contains the following packages and applications:
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm 10+
 
 ### Installation

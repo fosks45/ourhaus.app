@@ -36,10 +36,10 @@ export function getFirebaseConfig(): FirebaseConfig {
 export function validateFirebaseConfig(config: FirebaseConfig): boolean {
   return Boolean(
     config.apiKey &&
-      config.authDomain &&
-      config.projectId &&
-      config.storageBucket &&
-      config.messagingSenderId &&
-      config.appId
+    config.authDomain &&
+    config.projectId &&
+    config.storageBucket &&
+    config.messagingSenderId &&
+    config.appId
   );
 }

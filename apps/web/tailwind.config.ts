@@ -1,5 +1,14 @@
 import type { Config } from 'tailwindcss';
-import { colors, spacing, borderRadius, fontSize, fontWeight, lineHeight, letterSpacing, fontFamily } from '@ourhaus/brand';
+import {
+  colors,
+  spacing,
+  borderRadius,
+  fontSize,
+  fontWeight,
+  lineHeight,
+  letterSpacing,
+  fontFamily,
+} from '@ourhaus/brand';
 
 const config: Config = {
   content: [

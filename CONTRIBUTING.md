@@ -53,6 +53,7 @@ Thank you for your interest in contributing to OurHaus!
 ## Commit Messages
 
 Use clear, descriptive commit messages:
+
 - `feat: add new button variant`
 - `fix: resolve mobile layout issue`
 - `docs: update README`
