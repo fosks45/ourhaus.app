@@ -61,6 +61,8 @@ The app is configured as a Progressive Web App:
 
 PWA features are disabled in development mode and enabled in production.
 
+> **Note**: The icon files (icon-192x192.png, icon-512x512.png, apple-touch-icon.png, favicon.ico) currently contain SVG placeholders. For production, replace these with actual PNG/ICO files using a tool like [realfavicongenerator.net](https://realfavicongenerator.net/) or similar icon generation services.
+
 ## Design System
 
 The app uses design tokens from `@ourhaus/brand` and components from `@ourhaus/ui`:
