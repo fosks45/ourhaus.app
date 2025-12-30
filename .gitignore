@@ -1,110 +1,49 @@
-############################################
-# OS / Editor
-############################################
-.DS_Store
-Thumbs.db
-*.swp
-*.swo
-.idea/
-.vscode/*
-!.vscode/extensions.json
-!.vscode/settings.json
+# Dependencies
+node_modules
+.pnp
+.pnp.js
 
-############################################
-# Node / Package managers
-############################################
-node_modules/
+# Testing
+coverage
+
+# Next.js
+.next/
+out/
+build
+dist/
+
+# Production
+dist
+
+# Misc
+.DS_Store
+*.pem
+
+# Debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
-.pnpm-store/
 
-############################################
-# Build outputs
-############################################
-dist/
-build/
-out/
-
-############################################
-# Next.js
-############################################
-.next/
-.next/cache/
-.vercel/
-
-############################################
-# Turborepo
-############################################
-.turbo/
-
-############################################
-# Environment variables (NEVER COMMIT)
-############################################
+# Local env files
 .env
-.env.*
-!.env.example
+.env*.local
 
-############################################
-# Firebase
-############################################
-.firebase/
-firebase-debug.log
-firestore-debug.log
-ui-debug.log
+# Vercel
+.vercel
 
-# Firebase local emulators
-.emulators/
-
-############################################
-# Logs
-############################################
-logs/
-*.log
-
-############################################
-# Coverage / Testing
-############################################
-coverage/
-.nyc_output/
-
-############################################
-# TypeScript
-############################################
+# Typescript
 *.tsbuildinfo
 
-############################################
-# Storybook (if added later)
-############################################
-storybook-static/
+# Turbo
+.turbo
 
-############################################
-# PWA / Service workers
-############################################
-sw.js
-workbox-*.js
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
 
-############################################
-# React Native (future-proof)
-############################################
-android/
-ios/
-.expo/
-.expo-shared/
-*.jks
-*.keystore
-
-############################################
-# Temporary / Generated
-############################################
-tmp/
-temp/
-.cache/
-
-############################################
-# Misc
-############################################
-*.pem
-*.key
-*.crt
+# PWA
+public/sw.js
+public/workbox-*.js
