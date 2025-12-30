@@ -1,0 +1,75 @@
+name: Bug
+description: Something is broken or incorrect
+title: "bug: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What happened?
+      placeholder: e.g. Transfer completion did not revoke previous household access.
+    validations:
+      required: true
+
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Provide precise steps.
+      placeholder: |
+        1. …
+        2. …
+        3. …
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: e.g. Previous owners immediately lose access after transfer completion.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+
+  - type: dropdown
+    id: impact
+    attributes:
+      label: Impact
+      options:
+        - Low (cosmetic)
+        - Medium (workaround exists)
+        - High (blocks core flow)
+        - Critical (security/data integrity)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Screens, environment, logs, screenshots, etc.
+      placeholder: |
+        - Environment: dev/staging/prod
+        - Browser/device:
+        - Logs:
+    validations:
+      required: false
+
+  - type: textarea
+    id: security
+    attributes:
+      label: Security/data integrity notes
+      description: Does this touch immutability, access control, or transfer flows?
+      placeholder: |
+        - Is this an immutability violation?
+        - Is access incorrectly granted?
+    validations:
+      required: false
