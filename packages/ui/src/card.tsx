@@ -13,7 +13,13 @@ export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export const Card = React.forwardRef<HTMLDivElement, CardProps>(
   (
-    { variant = 'elevated', padding = 'md', children, className = '', ...props },
+    {
+      variant = 'elevated',
+      padding = 'md',
+      children,
+      className = '',
+      ...props
+    },
     ref
   ) => {
     const baseStyles = 'rounded-xl bg-white';
@@ -59,8 +65,7 @@ export const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
 
 CardHeader.displayName = 'CardHeader';
 
-export interface CardTitleProps
-  extends React.HTMLAttributes<HTMLHeadingElement> {
+export interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
 }
 

@@ -54,6 +54,7 @@ NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 ## PWA Features
 
 The app is configured as a Progressive Web App:
+
 - Installable on mobile and desktop
 - Offline support via service worker
 - Optimized icons for various platforms

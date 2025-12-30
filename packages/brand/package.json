@@ -11,6 +11,7 @@
     "./typography": "./src/typography.ts"
   },
   "scripts": {
+    "typecheck": "tsc --noEmit",
     "lint": "tsc --noEmit",
     "clean": "rm -rf .turbo node_modules"
   },
