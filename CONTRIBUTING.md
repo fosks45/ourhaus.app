@@ -9,6 +9,23 @@ Thank you for your interest in contributing to OurHaus!
 3. Run the development server: `cd apps/web && npm run dev`
 4. Open [http://localhost:3000](http://localhost:3000)
 
+### Git Hooks
+
+This project uses Husky and lint-staged to enforce code quality. After running `npm install`, the following git hooks are automatically configured:
+
+- **Pre-commit**: Runs on every commit
+  - Automatically formats staged files with Prettier
+  - Runs ESLint on staged TypeScript files and auto-fixes issues where possible
+  - Blocks commits if there are unfixable lint errors
+
+- **Pre-push**: Runs before every push
+  - Runs full lint check across all packages (`npm run lint`)
+  - Runs TypeScript type checking (`npm run typecheck`)
+  - Runs Prettier format check (`npm run format:check`)
+  - Blocks push if any checks fail
+
+These hooks ensure that only properly formatted, linted, and type-safe code enters the repository.
+
 ## Project Structure
 
 - **apps/web** - Main Next.js application
@@ -21,11 +38,12 @@ Thank you for your interest in contributing to OurHaus!
 
 1. Create a new branch for your feature
 2. Make your changes
-3. Run linting: `npm run lint`
-4. Build the project: `npm run build`
-5. Format your code: `npm run format`
-6. Commit your changes
-7. Create a pull request
+3. Stage your changes: `git add .`
+4. Commit your changes (pre-commit hook will automatically format and lint staged files)
+5. Push your changes (pre-push hook will run full checks)
+6. Create a pull request
+
+**Note**: If the pre-commit hook fails, fix the reported issues and try committing again. If the pre-push hook fails, run `npm run check` locally to see all errors and fix them before pushing.
 
 ## Code Style
 
