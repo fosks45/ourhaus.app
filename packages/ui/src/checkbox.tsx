@@ -34,7 +34,7 @@ export const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
     return (
       <div>
         <div className="flex items-start">
-          {/* Touch target wrapper - min 44px */}
+          {/* Touch target wrapper - min 44px per accessibility guidelines */}
           <div className="flex items-center h-11">
             <input
               ref={ref}

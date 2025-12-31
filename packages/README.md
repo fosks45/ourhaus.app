@@ -20,12 +20,40 @@ import { colors, spacing, fontSize } from '@ourhaus/brand';
 
 Reusable React components built with the design system:
 
-- **Button**: Primary, secondary, outline, and ghost variants
+**Primitive Components:**
+
+- **Button**: Primary, secondary, outline, and ghost variants with loading states
 - **Card**: Flexible container with header, title, and content sub-components
+- **Input/Textarea**: Form inputs with labels, validation, and help text
+- **Badge**: Status indicators in various colors and sizes
+- **Select**: Dropdown with validation states
+- **Checkbox/Radio**: Accessible form controls with ≥44px touch targets
+
+**Block Components:**
+
+- **List**: Lists with bordered, divided, and default variants
+- **EmptyState**: Content placeholder with icon and action
+- **SummaryBlock**: Statistics and metrics display
+
+**Layout Components:**
+
+- **Page**: Full page layouts with header and content areas
+- **Section**: Content sections with headers and descriptions
+- **AppShell**: Application layout with navigation
 
 ```typescript
-import { Button, Card, CardHeader, CardTitle, CardContent } from '@ourhaus/ui';
+import {
+  Button,
+  Card,
+  Input,
+  Badge,
+  List,
+  EmptyState,
+  Page,
+} from '@ourhaus/ui';
 ```
+
+See the [UI Gallery](/ui-gallery) for live examples.
 
 ### @ourhaus/shared
 
