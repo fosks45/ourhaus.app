@@ -32,18 +32,22 @@ function initializeEmulators(app: FirebaseApp): void {
 
   // Connect Auth emulator
   if (emulatorConfig.auth) {
-    import('firebase/auth').then(({ getAuth, connectAuthEmulator }) => {
-      const auth = getAuth(app);
-      const url = `http://${emulatorConfig.auth!.host}:${emulatorConfig.auth!.port}`;
-      connectAuthEmulator(auth, url, { disableWarnings: true });
-      console.log(`✓ Auth emulator: ${url}`);
-    });
+    import('firebase/auth')
+      .then(({ getAuth, connectAuthEmulator }) => {
+        const auth = getAuth(app);
+        const url = `http://${emulatorConfig.auth!.host}:${emulatorConfig.auth!.port}`;
+        connectAuthEmulator(auth, url, { disableWarnings: true });
+        console.log(`✓ Auth emulator: ${url}`);
+      })
+      .catch((err) => {
+        console.error('Failed to connect to Auth emulator:', err);
+      });
   }
 
   // Connect Firestore emulator
   if (emulatorConfig.firestore) {
-    import('firebase/firestore').then(
-      ({ getFirestore, connectFirestoreEmulator }) => {
+    import('firebase/firestore')
+      .then(({ getFirestore, connectFirestoreEmulator }) => {
         const db = getFirestore(app);
         connectFirestoreEmulator(
           db,
@@ -53,14 +57,16 @@ function initializeEmulators(app: FirebaseApp): void {
         console.log(
           `✓ Firestore emulator: ${emulatorConfig.firestore!.host}:${emulatorConfig.firestore!.port}`
         );
-      }
-    );
+      })
+      .catch((err) => {
+        console.error('Failed to connect to Firestore emulator:', err);
+      });
   }
 
   // Connect Storage emulator
   if (emulatorConfig.storage) {
-    import('firebase/storage').then(
-      ({ getStorage, connectStorageEmulator }) => {
+    import('firebase/storage')
+      .then(({ getStorage, connectStorageEmulator }) => {
         const storage = getStorage(app);
         connectStorageEmulator(
           storage,
@@ -70,14 +76,16 @@ function initializeEmulators(app: FirebaseApp): void {
         console.log(
           `✓ Storage emulator: ${emulatorConfig.storage!.host}:${emulatorConfig.storage!.port}`
         );
-      }
-    );
+      })
+      .catch((err) => {
+        console.error('Failed to connect to Storage emulator:', err);
+      });
   }
 
   // Connect Functions emulator
   if (emulatorConfig.functions) {
-    import('firebase/functions').then(
-      ({ getFunctions, connectFunctionsEmulator }) => {
+    import('firebase/functions')
+      .then(({ getFunctions, connectFunctionsEmulator }) => {
         const functions = getFunctions(app);
         connectFunctionsEmulator(
           functions,
@@ -87,8 +95,10 @@ function initializeEmulators(app: FirebaseApp): void {
         console.log(
           `✓ Functions emulator: ${emulatorConfig.functions!.host}:${emulatorConfig.functions!.port}`
         );
-      }
-    );
+      })
+      .catch((err) => {
+        console.error('Failed to connect to Functions emulator:', err);
+      });
   }
 
   emulatorsInitialized = true;
