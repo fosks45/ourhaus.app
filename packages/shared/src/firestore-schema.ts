@@ -214,6 +214,10 @@ export interface Household {
  * Collection: users/{userId}
  *
  * Links Firebase Auth users to households and stores profile data.
+ *
+ * Note: Users should typically belong to 1-2 households. The security rules
+ * are optimized to check the first 3 households. If a user needs access to
+ * more households, consider restructuring the access control pattern.
  */
 export interface UserProfile {
   id: string; // matches Firebase Auth UID
@@ -222,7 +226,7 @@ export interface UserProfile {
   photoURL?: string;
 
   // Household membership
-  householdIds: string[]; // List of households this user belongs to
+  householdIds: string[]; // List of households this user belongs to (max 3 for optimal security rules)
 
   // Metadata
   createdAt: FirestoreTimestamp;

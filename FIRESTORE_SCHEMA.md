@@ -444,12 +444,29 @@ npm run test:rules
 
 ## Future Enhancements
 
-- [ ] Add Cloud Functions for critical mutations (baseline sealing, ownership transfer)
-- [ ] Add automated security rules tests
-- [ ] Add indexes for common query patterns
+### High Priority
+
+- [ ] Add Cloud Functions for critical mutations (baseline sealing, ownership transfer, household management)
+- [ ] Add automated security rules tests using `@firebase/rules-unit-testing`
+- [ ] Improve access control scalability:
+  - Current implementation checks up to 3 households per user
+  - For users with more households, consider:
+    - Collection group query for access documents
+    - Denormalized access data (trade-off: more complex updates)
+    - Custom claims in JWT tokens for frequently accessed homes
+
+### Medium Priority
+
 - [ ] Add field-level validation (e.g., email format, required fields)
 - [ ] Add rate limiting for writes
 - [ ] Add audit logging for sensitive operations
+- [ ] Implement more granular role-based permissions (owner/member/viewer)
+- [ ] Add expiration time checks for temporary access
+
+### Low Priority
+
+- [ ] Add composite indexes for complex query patterns
+- [ ] Optimize security rule performance with caching strategies
 
 ## Migration Notes
 

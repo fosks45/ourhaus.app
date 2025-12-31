@@ -105,7 +105,9 @@ service cloud.firestore {
       allow read: if isAuthenticated() && belongsToHousehold(householdId);
       
       // TODO: Creation and updates should be handled by Cloud Functions
-      // For now, allow members to update (will be restricted later)
+      // to ensure data integrity and proper validation. For now, allow members
+      // to update (will be restricted later). Primary contact should be the only
+      // one who can make structural changes in production.
       allow create, update: if isAuthenticated() && belongsToHousehold(householdId);
       
       // No deletion of households
@@ -194,16 +196,16 @@ service cloud.firestore {
           && belongsToHousehold(request.resource.data.createdByHouseholdId)
           && request.resource.data.sealed == false; // Must start unsealed
         
-        // Users can only update snapshots that are not yet sealed
+        // Users can update snapshots **only if `sealed: false`**
         // Once sealed, snapshots become immutable
         allow update: if isAuthenticated() 
           && hasHomeAccess(homeId)
           && resource.data.sealed == false // Current state must be unsealed
           && (
-            // If sealing, can only set sealed=true and metadata
+            // If sealing, can only set sealed=true and metadata with current timestamp
             (request.resource.data.sealed == true 
               && request.resource.data.sealedBy == currentUserId()
-              && request.resource.data.sealedAt is timestamp)
+              && request.resource.data.sealedAt == request.time)
             // If not sealing, cannot set sealed field
             || (request.resource.data.sealed == false)
           );
