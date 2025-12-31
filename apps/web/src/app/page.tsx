@@ -1,5 +1,6 @@
 import { Button } from '@ourhaus/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@ourhaus/ui/card';
+import { FirebaseStatus } from '@/components/firebase-status';
 
 export default function HomePage() {
   return (
@@ -14,6 +15,9 @@ export default function HomePage() {
             Your digital home - Built with Next.js, TypeScript, and Tailwind
           </p>
         </header>
+
+        {/* Firebase Status */}
+        <FirebaseStatus />
 
         {/* Welcome Card */}
         <Card variant="elevated">
