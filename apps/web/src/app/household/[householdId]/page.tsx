@@ -12,7 +12,6 @@ import {
   addDoc,
   updateDoc,
   arrayRemove,
-  arrayUnion,
   serverTimestamp,
   deleteField,
 } from 'firebase/firestore';
@@ -33,7 +32,7 @@ export default function HouseholdDetailPage() {
   const params = useParams();
   const householdId = params.householdId as string;
   const router = useRouter();
-  const { user, userProfile, refreshUserProfile } = useAuth();
+  const { user } = useAuth();
 
   const [household, setHousehold] = useState<Household | null>(null);
   const [members, setMembers] = useState<{ [key: string]: UserProfile }>({});
@@ -92,6 +91,7 @@ export default function HouseholdDetailPage() {
 
   useEffect(() => {
     loadHousehold();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [householdId]);
 
   const handleInvite = async (e: React.FormEvent) => {
@@ -128,16 +128,13 @@ export default function HouseholdDetailPage() {
         updatedAt: new Date(),
       };
 
-      await addDoc(
-        collection(db, 'households', household.id, 'invitations'),
-        {
-          ...invitationData,
-          invitedAt: serverTimestamp(),
-          expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        }
-      );
+      await addDoc(collection(db, 'households', household.id, 'invitations'), {
+        ...invitationData,
+        invitedAt: serverTimestamp(),
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+      });
 
       alert(
         `Invitation sent to ${inviteEmail}! Share this token with them: ${token}`

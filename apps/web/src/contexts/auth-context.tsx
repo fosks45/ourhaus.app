@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useCallback,
+} from 'react';
 import { getAuth, onAuthStateChanged, User } from 'firebase/auth';
 import { getFirebaseApp } from '@ourhaus/firebase';
 import {
@@ -37,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshUserProfile = async () => {
+  const refreshUserProfile = useCallback(async () => {
     if (!user) {
       setUserProfile(null);
       return;
@@ -90,7 +96,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
-  };
+  }, [user]);
 
   const handleSignOut = async () => {
     try {
@@ -121,13 +127,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [refreshUserProfile]);
 
   useEffect(() => {
     if (user) {
       refreshUserProfile();
     }
-  }, [user]);
+  }, [user, refreshUserProfile]);
 
   return (
     <AuthContext.Provider

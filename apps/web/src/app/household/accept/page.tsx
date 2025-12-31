@@ -61,7 +61,7 @@ export default function AcceptInvitationPage() {
         );
         const invitationsSnapshot = await getDocs(invitationsQuery);
 
-        if (!invitationsSnapshot.empty) {
+        if (!invitationsSnapshot.empty && invitationsSnapshot.docs[0]) {
           const invitationDoc = invitationsSnapshot.docs[0];
           const invitationData = invitationDoc.data();
           foundInvitation = {
@@ -96,9 +96,7 @@ export default function AcceptInvitationPage() {
       }
 
       // Check if email matches (optional - can be removed if you want to allow any user)
-      if (
-        foundInvitation.email.toLowerCase() !== user.email?.toLowerCase()
-      ) {
+      if (foundInvitation.email.toLowerCase() !== user.email?.toLowerCase()) {
         setError('This invitation was sent to a different email address');
         return;
       }
