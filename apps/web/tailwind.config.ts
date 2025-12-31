@@ -8,6 +8,7 @@ import {
   lineHeight,
   letterSpacing,
   fontFamily,
+  boxShadow,
 } from '@ourhaus/brand';
 
 const config: Config = {
@@ -38,6 +39,7 @@ const config: Config = {
         sans: fontFamily.sans,
         mono: fontFamily.mono,
       },
+      boxShadow,
     },
   },
   plugins: [],
