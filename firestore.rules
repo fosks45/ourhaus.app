@@ -1,0 +1,218 @@
+rules_version = '2';
+
+/**
+ * OurHaus Firestore Security Rules v1
+ * 
+ * Core Invariants:
+ * 1. Events are append-only (create-only, no update/delete)
+ * 2. Sealed snapshots are immutable (no update/delete)
+ * 3. Access is controlled via homes/{homeId}/access/{householdId} documents
+ * 4. Homes outlive users - data persists through ownership transfers
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ============================================================================
+    // HELPER FUNCTIONS
+    // ============================================================================
+    
+    /**
+     * Check if user is authenticated
+     */
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    /**
+     * Get the current user's ID
+     */
+    function currentUserId() {
+      return request.auth.uid;
+    }
+    
+    /**
+     * Check if user has access to a home via the access subcollection
+     * @param homeId - The ID of the home to check access for
+     * 
+     * Note: This implementation checks up to 3 households per user.
+     * For users with more households, consider restructuring to use
+     * a separate collection group query or denormalized access data.
+     */
+    function hasHomeAccess(homeId) {
+      // Get all household IDs the user belongs to from their user profile
+      let userProfile = get(/databases/$(database)/documents/users/$(currentUserId()));
+      let householdIds = userProfile.data.householdIds;
+      
+      // Check if any of the user's households have access to this home
+      // Limited to first 3 households for performance
+      return exists(/databases/$(database)/documents/homes/$(homeId)/access/$(householdIds[0]))
+        || (householdIds.size() > 1 && exists(/databases/$(database)/documents/homes/$(homeId)/access/$(householdIds[1])))
+        || (householdIds.size() > 2 && exists(/databases/$(database)/documents/homes/$(homeId)/access/$(householdIds[2])));
+    }
+    
+    /**
+     * Check if user belongs to a specific household
+     * @param householdId - The household ID to check
+     */
+    function belongsToHousehold(householdId) {
+      let userProfile = get(/databases/$(database)/documents/users/$(currentUserId()));
+      return currentUserId() in get(/databases/$(database)/documents/households/$(householdId)).data.memberIds
+        && householdId in userProfile.data.householdIds;
+    }
+    
+    /**
+     * Check if user is owner of a home
+     * @param homeId - The home ID to check
+     */
+    function isHomeOwner(homeId) {
+      let home = get(/databases/$(database)/documents/homes/$(homeId));
+      return belongsToHousehold(home.data.currentOwnerHouseholdId);
+    }
+    
+    // ============================================================================
+    // USER PROFILES
+    // Collection: users/{userId}
+    // ============================================================================
+    
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isAuthenticated() && currentUserId() == userId;
+      
+      // Users can create their own profile
+      allow create: if isAuthenticated() 
+        && currentUserId() == userId
+        && request.resource.data.id == userId
+        && request.resource.data.email == request.auth.token.email;
+      
+      // Users can update their own profile (but not their ID or email)
+      allow update: if isAuthenticated() 
+        && currentUserId() == userId
+        && request.resource.data.id == resource.data.id
+        && request.resource.data.email == resource.data.email;
+      
+      // No deletion of user profiles
+      allow delete: if false;
+    }
+    
+    // ============================================================================
+    // HOUSEHOLDS
+    // Collection: households/{householdId}
+    // ============================================================================
+    
+    match /households/{householdId} {
+      // Members can read their household
+      allow read: if isAuthenticated() && belongsToHousehold(householdId);
+      
+      // TODO: Creation and updates should be handled by Cloud Functions
+      // to ensure data integrity and proper validation. For now, allow members
+      // to update (will be restricted later). Primary contact should be the only
+      // one who can make structural changes in production.
+      allow create, update: if isAuthenticated() && belongsToHousehold(householdId);
+      
+      // No deletion of households
+      allow delete: if false;
+    }
+    
+    // ============================================================================
+    // HOMES
+    // Collection: homes/{homeId}
+    // ============================================================================
+    
+    match /homes/{homeId} {
+      // Users with access can read home data
+      allow read: if isAuthenticated() && hasHomeAccess(homeId);
+      
+      // Only owners can create or update homes
+      // TODO: Creation should be handled by Cloud Functions
+      allow create: if isAuthenticated() && belongsToHousehold(request.resource.data.currentOwnerHouseholdId);
+      
+      allow update: if isAuthenticated() && isHomeOwner(homeId);
+      
+      // No deletion of homes (homes outlive users)
+      allow delete: if false;
+      
+      // --------------------------------------------------------------------------
+      // HOME ACCESS SUBCOLLECTION
+      // Collection: homes/{homeId}/access/{householdId}
+      // --------------------------------------------------------------------------
+      
+      match /access/{householdId} {
+        // Users with home access can read all access documents for that home
+        allow read: if isAuthenticated() && hasHomeAccess(homeId);
+        
+        // Only home owners can grant access
+        // TODO: Should be handled by Cloud Functions to ensure atomicity
+        allow create: if isAuthenticated() && isHomeOwner(homeId)
+          && request.resource.data.householdId == householdId
+          && request.resource.data.homeId == homeId;
+        
+        // Only home owners can update access (e.g., to extend expiration)
+        allow update: if isAuthenticated() && isHomeOwner(homeId);
+        
+        // Only home owners can revoke access
+        // CRITICAL: During ownership transfer, old access must be deleted
+        allow delete: if isAuthenticated() && isHomeOwner(homeId);
+      }
+      
+      // --------------------------------------------------------------------------
+      // EVENTS SUBCOLLECTION (APPEND-ONLY)
+      // Collection: homes/{homeId}/events/{eventId}
+      // --------------------------------------------------------------------------
+      
+      match /events/{eventId} {
+        // Users with home access can read events
+        allow read: if isAuthenticated() && hasHomeAccess(homeId);
+        
+        // Users with home access can create events
+        // INVARIANT: Events are append-only - once created, they cannot be modified
+        allow create: if isAuthenticated() 
+          && hasHomeAccess(homeId)
+          && request.resource.data.homeId == homeId
+          && request.resource.data.createdBy == currentUserId()
+          && belongsToHousehold(request.resource.data.createdByHouseholdId);
+        
+        // INVARIANT: No updates to events (append-only)
+        allow update: if false;
+        
+        // INVARIANT: No deletion of events (append-only)
+        allow delete: if false;
+      }
+      
+      // --------------------------------------------------------------------------
+      // SNAPSHOTS SUBCOLLECTION (IMMUTABLE WHEN SEALED)
+      // Collection: homes/{homeId}/snapshots/{snapshotId}
+      // --------------------------------------------------------------------------
+      
+      match /snapshots/{snapshotId} {
+        // Users with home access can read snapshots
+        allow read: if isAuthenticated() && hasHomeAccess(homeId);
+        
+        // Users with home access can create snapshots
+        allow create: if isAuthenticated() 
+          && hasHomeAccess(homeId)
+          && request.resource.data.homeId == homeId
+          && request.resource.data.createdBy == currentUserId()
+          && belongsToHousehold(request.resource.data.createdByHouseholdId)
+          && request.resource.data.sealed == false; // Must start unsealed
+        
+        // Users can update snapshots **only if `sealed: false`**
+        // Once sealed, snapshots become immutable
+        allow update: if isAuthenticated() 
+          && hasHomeAccess(homeId)
+          && resource.data.sealed == false // Current state must be unsealed
+          && (
+            // If sealing, can only set sealed=true and metadata with current timestamp
+            (request.resource.data.sealed == true 
+              && request.resource.data.sealedBy == currentUserId()
+              && request.resource.data.sealedAt == request.time)
+            // If not sealing, cannot set sealed field
+            || (request.resource.data.sealed == false)
+          );
+        
+        // INVARIANT: No deletion of snapshots
+        allow delete: if false;
+      }
+    }
+  }
+}

@@ -71,7 +71,20 @@ The web app includes Progressive Web App features:
 - **TypeScript**: Strict mode enabled for type safety
 - **Next.js 14**: Latest App Router architecture
 - **Tailwind CSS**: Utility-first styling with design tokens
-- **Firebase**: Ready for backend integration
+- **Firebase**: Backend with Firestore, Auth, Storage, and Cloud Functions
+
+### Firestore Schema
+
+OurHaus uses a carefully designed Firestore schema with strict security rules to enforce:
+
+- **Append-only history**: Events can never be updated or deleted
+- **Immutable snapshots**: Sealed baseline snapshots are permanently locked
+- **Controlled access**: Home access is granted via explicit access documents
+
+For details, see:
+
+- [FIRESTORE_SCHEMA.md](./FIRESTORE_SCHEMA.md) - Data models and security invariants
+- [FIRESTORE_RULES_TESTING.md](./FIRESTORE_RULES_TESTING.md) - Testing guide
 
 ## 📦 Package Management
 
@@ -80,6 +93,33 @@ This project uses npm workspaces for monorepo management. Internal packages are 
 ## 🔒 Environment Variables
 
 Copy `.env.example` to `.env.local` in `apps/web` and configure Firebase credentials for full functionality.
+
+For local development with Firebase Emulator:
+
+```bash
+NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true
+```
+
+## 🧪 Firebase Emulator
+
+For local development and testing:
+
+```bash
+# Start Firebase emulators
+firebase emulators:start
+
+# Access Emulator UI
+open http://localhost:4000
+```
+
+This provides local instances of:
+
+- Firestore (port 8080)
+- Authentication (port 9099)
+- Storage (port 9199)
+- Functions (port 5001)
+
+See [FIRESTORE_RULES_TESTING.md](./FIRESTORE_RULES_TESTING.md) for testing security rules.
 
 ## 🧪 Tech Stack
 

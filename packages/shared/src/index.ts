@@ -3,6 +3,8 @@
  * Common types used across the OurHaus application
  */
 
+export * from './firestore-schema';
+
 /**
  * Base entity interface for domain objects
  */
