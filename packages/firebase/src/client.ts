@@ -116,10 +116,11 @@ export function getFirebaseApp(): FirebaseApp {
 
   if (!validateFirebaseConfig(config)) {
     console.warn(
-      'Firebase config is incomplete. Firebase features will not work.'
+      'Firebase config is incomplete. Firebase features will not work. Please set Firebase environment variables in .env.local'
     );
-    // Return a placeholder - in a real app, you might want to throw an error
-    // or return a mock instance for development
+    throw new Error(
+      'Firebase configuration is incomplete. Check console for details.'
+    );
   }
 
   firebaseApp = initializeApp(config);
