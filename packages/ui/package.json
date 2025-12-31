@@ -7,7 +7,18 @@
   "exports": {
     ".": "./src/index.tsx",
     "./button": "./src/button.tsx",
-    "./card": "./src/card.tsx"
+    "./card": "./src/card.tsx",
+    "./input": "./src/input.tsx",
+    "./badge": "./src/badge.tsx",
+    "./select": "./src/select.tsx",
+    "./checkbox": "./src/checkbox.tsx",
+    "./radio": "./src/radio.tsx",
+    "./list": "./src/list.tsx",
+    "./empty-state": "./src/empty-state.tsx",
+    "./summary-block": "./src/summary-block.tsx",
+    "./page": "./src/page.tsx",
+    "./section": "./src/section.tsx",
+    "./app-shell": "./src/app-shell.tsx"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
