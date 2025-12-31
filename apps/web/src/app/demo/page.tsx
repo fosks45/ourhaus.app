@@ -86,9 +86,25 @@ const SettingsIcon = () => (
 
 const navItems: NavItem[] = [
   { id: 'home', label: 'Home', icon: <HomeIcon />, href: '/demo' },
-  { id: 'timeline', label: 'Timeline', icon: <TimelineIcon />, href: '/demo/timeline', badge: 3 },
-  { id: 'documents', label: 'Documents', icon: <DocumentsIcon />, href: '/demo/documents' },
-  { id: 'settings', label: 'Settings', icon: <SettingsIcon />, href: '/demo/settings' },
+  {
+    id: 'timeline',
+    label: 'Timeline',
+    icon: <TimelineIcon />,
+    href: '/demo/timeline',
+    badge: 3,
+  },
+  {
+    id: 'documents',
+    label: 'Documents',
+    icon: <DocumentsIcon />,
+    href: '/demo/documents',
+  },
+  {
+    id: 'settings',
+    label: 'Settings',
+    icon: <SettingsIcon />,
+    href: '/demo/settings',
+  },
 ];
 
 export default function DemoPage() {
@@ -140,7 +156,10 @@ export default function DemoPage() {
                   <CardTitle className="text-lg">📱 Mobile-First</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
-                  <p>Optimized for one-handed use with bottom navigation and touch-friendly targets (44px min).</p>
+                  <p>
+                    Optimized for one-handed use with bottom navigation and
+                    touch-friendly targets (44px min).
+                  </p>
                 </CardContent>
               </Card>
 
@@ -149,7 +168,10 @@ export default function DemoPage() {
                   <CardTitle className="text-lg">🖥️ Desktop Ready</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
-                  <p>Sidebar navigation with full layout support on larger screens.</p>
+                  <p>
+                    Sidebar navigation with full layout support on larger
+                    screens.
+                  </p>
                 </CardContent>
               </Card>
 
@@ -158,7 +180,10 @@ export default function DemoPage() {
                   <CardTitle className="text-lg">⚡ PWA Support</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
-                  <p>Installable as a Progressive Web App with offline capabilities.</p>
+                  <p>
+                    Installable as a Progressive Web App with offline
+                    capabilities.
+                  </p>
                 </CardContent>
               </Card>
 
@@ -167,7 +192,9 @@ export default function DemoPage() {
                   <CardTitle className="text-lg">🎨 Smooth UI</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
-                  <p>Transitions, loading skeletons, and polished interactions.</p>
+                  <p>
+                    Transitions, loading skeletons, and polished interactions.
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -221,16 +248,28 @@ export default function DemoPage() {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div className="border-b border-neutral-200 pb-4">
-                  <h3 className="font-semibold text-neutral-900 mb-1">Account</h3>
-                  <p className="text-sm text-neutral-600">Manage your account settings</p>
+                  <h3 className="font-semibold text-neutral-900 mb-1">
+                    Account
+                  </h3>
+                  <p className="text-sm text-neutral-600">
+                    Manage your account settings
+                  </p>
                 </div>
                 <div className="border-b border-neutral-200 pb-4">
-                  <h3 className="font-semibold text-neutral-900 mb-1">Notifications</h3>
-                  <p className="text-sm text-neutral-600">Configure notification preferences</p>
+                  <h3 className="font-semibold text-neutral-900 mb-1">
+                    Notifications
+                  </h3>
+                  <p className="text-sm text-neutral-600">
+                    Configure notification preferences
+                  </p>
                 </div>
                 <div className="border-b border-neutral-200 pb-4">
-                  <h3 className="font-semibold text-neutral-900 mb-1">Privacy</h3>
-                  <p className="text-sm text-neutral-600">Control your privacy settings</p>
+                  <h3 className="font-semibold text-neutral-900 mb-1">
+                    Privacy
+                  </h3>
+                  <p className="text-sm text-neutral-600">
+                    Control your privacy settings
+                  </p>
                 </div>
                 <div>
                   <h3 className="font-semibold text-neutral-900 mb-1">About</h3>
@@ -252,7 +291,8 @@ export default function DemoPage() {
       activeNavId={activeNav}
       onNavItemClick={handleNavClick}
       mobileHeader={{
-        title: navItems.find((item) => item.id === activeNav)?.label || 'OurHaus',
+        title:
+          navItems.find((item) => item.id === activeNav)?.label || 'OurHaus',
       }}
       sidebarHeader={
         <div className="flex items-center">

@@ -189,6 +189,20 @@ export interface Snapshot {
 }
 
 /**
+ * Household member role types
+ */
+export type HouseholdRole = 'owner' | 'editor' | 'viewer';
+
+/**
+ * Household member information
+ */
+export interface HouseholdMember {
+  userId: string;
+  role: HouseholdRole;
+  joinedAt: FirestoreTimestamp;
+}
+
+/**
  * Household - Represents a group of users (e.g., a family)
  * Collection: households/{householdId}
  *
@@ -200,6 +214,11 @@ export interface Household {
 
   // Members (user IDs)
   memberIds: string[];
+
+  // Member details with roles
+  members: {
+    [userId: string]: HouseholdMember;
+  };
 
   // Primary contact
   primaryContactId: string;
@@ -237,4 +256,26 @@ export interface UserProfile {
     notifications: boolean;
     theme?: 'light' | 'dark' | 'auto';
   };
+}
+
+/**
+ * Household Invitation - Tokenized invitations for joining households
+ * Collection: households/{householdId}/invitations/{invitationId}
+ *
+ * Invitations are time-limited and can be used once.
+ */
+export interface HouseholdInvitation {
+  id: string;
+  householdId: string;
+  token: string; // Unique token for accepting invitation
+  email: string; // Email address invited
+  role: HouseholdRole; // Role to be assigned upon acceptance
+  invitedBy: string; // userId who created the invitation
+  invitedAt: FirestoreTimestamp;
+  expiresAt: FirestoreTimestamp; // Invitation expiration
+  status: 'pending' | 'accepted' | 'expired' | 'cancelled';
+  acceptedBy?: string; // userId who accepted (if accepted)
+  acceptedAt?: FirestoreTimestamp;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
 }
