@@ -64,20 +64,17 @@ export default function CreateHouseholdPage() {
         updatedAt: new Date(),
       };
 
-      const householdRef = await addDoc(
-        collection(db, 'households'),
-        {
-          ...householdData,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-          members: {
-            [user.uid]: {
-              ...member,
-              joinedAt: serverTimestamp(),
-            },
+      const householdRef = await addDoc(collection(db, 'households'), {
+        ...householdData,
+        createdAt: serverTimestamp(),
+        updatedAt: serverTimestamp(),
+        members: {
+          [user.uid]: {
+            ...member,
+            joinedAt: serverTimestamp(),
           },
-        }
-      );
+        },
+      });
 
       // Update user profile to include household ID
       const userDocRef = doc(db, 'users', user.uid);

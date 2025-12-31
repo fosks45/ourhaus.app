@@ -55,7 +55,9 @@ export default function SignUpPage() {
       <div className="w-full max-w-md">
         <Card variant="elevated">
           <CardHeader>
-            <CardTitle className="text-center">Create OurHaus Account</CardTitle>
+            <CardTitle className="text-center">
+              Create OurHaus Account
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
