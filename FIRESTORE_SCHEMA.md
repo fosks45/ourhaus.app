@@ -27,6 +27,8 @@ OurHaus uses Firestore to store home history data with these core principles:
 
 ## Data Models
 
+> **Note on Timestamps**: All schemas use `FirestoreTimestamp` (TypeScript alias for `Date`). In actual Firestore documents, timestamps are stored as Firestore `Timestamp` objects with `.seconds` and `.nanoseconds` properties. Use `.toDate()` when reading from Firestore, and `serverTimestamp()` or `Date` objects when writing.
+
 ### User Profile
 
 **Collection**: `users/{userId}`
@@ -38,8 +40,8 @@ interface UserProfile {
   displayName?: string;
   photoURL?: string;
   householdIds: string[]; // List of households this user belongs to
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
   preferences?: {
     notifications: boolean;
     theme?: 'light' | 'dark' | 'auto';
@@ -64,8 +66,8 @@ interface Household {
   name: string;
   memberIds: string[]; // User IDs
   primaryContactId: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
 }
 ```
 
@@ -90,8 +92,8 @@ interface Home {
     country: string;
   };
   currentOwnerHouseholdId: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
   nickname?: string;
   photoURL?: string;
 }
@@ -115,10 +117,10 @@ interface HomeAccess {
   homeId: string;
   role: 'owner' | 'member' | 'viewer';
   grantedBy: string; // userId
-  grantedAt: Timestamp;
-  expiresAt?: Timestamp; // Optional expiration
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  grantedAt: FirestoreTimestamp;
+  expiresAt?: FirestoreTimestamp; // Optional expiration
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
 }
 ```
 
@@ -153,10 +155,10 @@ interface Event {
   category?: string;
   title: string;
   description?: string;
-  date: Timestamp;
+  date: FirestoreTimestamp;
   createdBy: string;
   createdByHouseholdId: string;
-  createdAt: Timestamp;
+  createdAt: FirestoreTimestamp;
   attachments?: Array<{
     name: string;
     url: string;
@@ -197,14 +199,14 @@ interface Snapshot {
   homeId: string;
   title: string;
   description?: string;
-  date: Timestamp;
+  date: FirestoreTimestamp;
   sealed: boolean; // Once true, snapshot becomes immutable
-  sealedAt?: Timestamp;
+  sealedAt?: FirestoreTimestamp;
   sealedBy?: string;
   createdBy: string;
   createdByHouseholdId: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
+  createdAt: FirestoreTimestamp;
+  updatedAt: FirestoreTimestamp;
   type: 'move-in' | 'inspection' | 'transfer' | 'annual' | 'custom';
   files?: Array<{
     name: string;

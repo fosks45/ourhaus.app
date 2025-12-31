@@ -10,8 +10,14 @@
 
 /**
  * Timestamp type for Firestore
- * When reading from Firestore, use Timestamp.toDate()
- * When writing to Firestore, use Timestamp.fromDate() or serverTimestamp()
+ *
+ * In Firestore documents, timestamps are stored as Firestore Timestamp objects.
+ * When working with the Firebase SDK:
+ * - Reading: Firestore Timestamp objects (use .toDate() to convert to Date)
+ * - Writing: Can use Date objects (auto-converted) or serverTimestamp()
+ *
+ * This type uses Date for simplicity in TypeScript, but be aware that actual
+ * Firestore documents contain Timestamp objects with .seconds and .nanoseconds
  */
 export type FirestoreTimestamp = Date;
 

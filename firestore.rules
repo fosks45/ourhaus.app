@@ -34,6 +34,10 @@ service cloud.firestore {
     /**
      * Check if user has access to a home via the access subcollection
      * @param homeId - The ID of the home to check access for
+     * 
+     * Note: This implementation checks up to 3 households per user.
+     * For users with more households, consider restructuring to use
+     * a separate collection group query or denormalized access data.
      */
     function hasHomeAccess(homeId) {
       // Get all household IDs the user belongs to from their user profile
@@ -41,17 +45,10 @@ service cloud.firestore {
       let householdIds = userProfile.data.householdIds;
       
       // Check if any of the user's households have access to this home
+      // Limited to first 3 households for performance
       return exists(/databases/$(database)/documents/homes/$(homeId)/access/$(householdIds[0]))
         || (householdIds.size() > 1 && exists(/databases/$(database)/documents/homes/$(homeId)/access/$(householdIds[1])))
         || (householdIds.size() > 2 && exists(/databases/$(database)/documents/homes/$(homeId)/access/$(householdIds[2])));
-    }
-    
-    /**
-     * Check if access has not expired
-     * @param accessDoc - The access document data
-     */
-    function accessNotExpired(accessDoc) {
-      return !('expiresAt' in accessDoc) || accessDoc.expiresAt > request.time;
     }
     
     /**
