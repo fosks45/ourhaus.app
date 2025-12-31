@@ -22,6 +22,7 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
   themeColor: '#0ea5e9',
+  viewportFit: 'cover', // Enable safe-area support for notched devices
 };
 
 export default function RootLayout({
