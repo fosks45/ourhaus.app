@@ -1,8 +1,31 @@
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/contexts/auth-context';
 import { Button } from '@ourhaus/ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from '@ourhaus/ui/card';
 import { FirebaseStatus } from '@/components/firebase-status';
+import Link from 'next/link';
 
 export default function HomePage() {
+  const router = useRouter();
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    if (!loading && user) {
+      router.push('/household');
+    }
+  }, [user, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-neutral-600">Loading...</p>
+      </div>
+    );
+  }
+
   return (
     <main className="min-h-screen p-4 sm:p-8 md:p-12">
       <div className="max-w-4xl mx-auto space-y-8">
@@ -12,7 +35,7 @@ export default function HomePage() {
             OurHaus
           </h1>
           <p className="text-lg sm:text-xl text-text-secondary">
-            Your digital home - Built with Next.js, TypeScript, and Tailwind
+            Version-controlled home history for everyone
           </p>
         </header>
 
@@ -26,56 +49,31 @@ export default function HomePage() {
           </CardHeader>
           <CardContent>
             <p className="mb-4">
-              This is a mobile-first, PWA-ready Next.js application built with:
+              OurHaus helps you track and manage your home&apos;s history with
+              your household members. Keep all maintenance records, documents,
+              and important information in one place.
             </p>
             <ul className="list-disc list-inside space-y-2 text-text-secondary">
-              <li>Next.js 14 with App Router</li>
-              <li>TypeScript (strict mode)</li>
-              <li>Tailwind CSS for styling</li>
-              <li>Turborepo monorepo structure</li>
-              <li>Design system with shared tokens</li>
-              <li>PWA capabilities</li>
+              <li>Collaborate with unlimited household members</li>
+              <li>Role-based access control (Owner, Editor, Viewer)</li>
+              <li>Time-limited invitations for security</li>
+              <li>Version-controlled home history</li>
             </ul>
           </CardContent>
         </Card>
 
-        {/* Features Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <Card variant="outlined">
-            <CardHeader>
-              <CardTitle className="text-lg">📦 Packages</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm">
-              <ul className="space-y-1">
-                <li>@ourhaus/brand - Design tokens</li>
-                <li>@ourhaus/ui - UI components</li>
-                <li>@ourhaus/shared - Types</li>
-                <li>@ourhaus/firebase - Firebase setup</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card variant="outlined">
-            <CardHeader>
-              <CardTitle className="text-lg">🎨 Design System</CardTitle>
-            </CardHeader>
-            <CardContent className="text-sm">
-              <p>
-                Centralized design tokens for colors, spacing, and typography
-                ensure consistency across the application.
-              </p>
-            </CardContent>
-          </Card>
-        </div>
-
         {/* CTA Section */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center py-8">
-          <Button variant="primary" size="lg">
-            Get Started
-          </Button>
-          <Button variant="outline" size="lg">
-            Learn More
-          </Button>
+          <Link href="/auth/signup">
+            <Button variant="primary" size="lg">
+              Get Started
+            </Button>
+          </Link>
+          <Link href="/auth/signin">
+            <Button variant="outline" size="lg">
+              Sign In
+            </Button>
+          </Link>
         </div>
       </div>
     </main>

@@ -104,14 +104,42 @@ service cloud.firestore {
       // Members can read their household
       allow read: if isAuthenticated() && belongsToHousehold(householdId);
       
-      // TODO: Creation and updates should be handled by Cloud Functions
+      // Allow any authenticated user to create a household
+      allow create: if isAuthenticated()
+        && request.resource.data.primaryContactId == currentUserId()
+        && currentUserId() in request.resource.data.memberIds;
+      
+      // TODO: Updates should be handled by Cloud Functions
       // to ensure data integrity and proper validation. For now, allow members
       // to update (will be restricted later). Primary contact should be the only
       // one who can make structural changes in production.
-      allow create, update: if isAuthenticated() && belongsToHousehold(householdId);
+      allow update: if isAuthenticated() && belongsToHousehold(householdId);
       
       // No deletion of households
       allow delete: if false;
+      
+      // --------------------------------------------------------------------------
+      // HOUSEHOLD INVITATIONS SUBCOLLECTION
+      // Collection: households/{householdId}/invitations/{invitationId}
+      // --------------------------------------------------------------------------
+      
+      match /invitations/{invitationId} {
+        // Members can read invitations for their household
+        allow read: if isAuthenticated() && belongsToHousehold(householdId);
+        
+        // Owners and editors can create invitations
+        allow create: if isAuthenticated() 
+          && belongsToHousehold(householdId)
+          && request.resource.data.householdId == householdId
+          && request.resource.data.invitedBy == currentUserId();
+        
+        // Allow updating invitation status (for accepting)
+        // Any authenticated user can update to accept (will be validated by app logic)
+        allow update: if isAuthenticated();
+        
+        // Owners can delete invitations
+        allow delete: if isAuthenticated() && belongsToHousehold(householdId);
+      }
     }
     
     // ============================================================================
