@@ -22,6 +22,7 @@ function flattenTokens(
   for (const [key, value] of Object.entries(obj)) {
     const newKey = prefix ? `${prefix}${separator}${key}` : key;
 
+    // Check if value is a nested object (but not an array, since arrays are also objects)
     if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
       Object.assign(result, flattenTokens(value, newKey, separator));
     } else {
