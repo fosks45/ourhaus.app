@@ -102,8 +102,12 @@ export const SkeletonCard: React.FC<SkeletonCardProps> = ({
   className = '',
 }) => {
   return (
-    <div className={`p-4 bg-white rounded-lg border border-neutral-200 ${className}`}>
-      {hasImage && <Skeleton variant="rectangular" height={200} className="mb-4" />}
+    <div
+      className={`p-4 bg-white rounded-lg border border-neutral-200 ${className}`}
+    >
+      {hasImage && (
+        <Skeleton variant="rectangular" height={200} className="mb-4" />
+      )}
       <div className="space-y-3">
         {hasAvatar && (
           <div className="flex items-center space-x-3">
